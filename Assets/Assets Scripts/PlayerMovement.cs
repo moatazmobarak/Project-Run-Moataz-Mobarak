@@ -72,4 +72,12 @@ public class PlayerMovement : MonoBehaviour
         float rayLength = 1.1f;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, rayLength);
     }
+    void OnCollisionEnter(Collision collision)
+{
+    if (collision.gameObject.CompareTag("Obstacle"))
+    {
+        GameManager.instance.GameOver();
+    }
+}
+
 }
