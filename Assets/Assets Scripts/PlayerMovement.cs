@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float forwardSpeed = 10f;
+
     public float laneDistance = 3f;
     public float laneChangeSpeed = 10f;
     public float jumpForce = 6f;
