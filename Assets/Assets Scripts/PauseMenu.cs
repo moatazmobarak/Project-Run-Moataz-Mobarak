@@ -4,9 +4,10 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool isPaused = false;
     public GameObject pauseMenuUI;
     public Slider volumeSlider;
+
+    private bool isPaused = false;
 
     void Start()
     {
@@ -23,6 +24,11 @@ public class PauseMenu : MonoBehaviour
             else
                 Pause();
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+{
+    Debug.Log("ESC pressed");
+}
+
     }
 
     public void Resume()

@@ -29,7 +29,7 @@ public class ObstacleSpawner : MonoBehaviour
     void SpawnObstacle()
     {
         float laneX = lanes[Random.Range(0, lanes.Length)];
-        Vector3 spawnPos = new Vector3(laneX, 0.5f, nextSpawnZ);
+        Vector3 spawnPos = new Vector3(laneX, -1f, nextSpawnZ);
 
         Instantiate(obstaclePrefab, spawnPos, Quaternion.identity);
     }

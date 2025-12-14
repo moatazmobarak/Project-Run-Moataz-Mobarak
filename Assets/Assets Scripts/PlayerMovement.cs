@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public float laneChangeSpeed = 10f;
     public float jumpForce = 6f;
 
+    private Animator animator;
     private Rigidbody rb;
     private int currentLane = 0;
     private bool isGrounded;
@@ -14,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     void Update()
@@ -47,6 +49,10 @@ public class PlayerMovement : MonoBehaviour
             targetPosition,
             laneChangeSpeed * Time.fixedDeltaTime
         );
+
+        animator.SetBool("isGrounded", isGrounded);
+        animator.SetFloat("yVelocity", rb.linearVelocity.y);
+
 
         rb.MovePosition(newPosition);
 
