@@ -122,3 +122,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collectibleData: {fileID: 11400000, guid: aebc145fe4ee8b94f8c6b3de19038e8c, type: 2}
+  pickupEffect: {fileID: 5753028288175138894, guid: 543e71e2acd1cac4784fbcbacef7e255, type: 3}

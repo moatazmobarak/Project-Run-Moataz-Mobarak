@@ -2,16 +2,25 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float forwardSpeed = 10f;
+    [Header("Speed")]
+    public float baseSpeed = 10f;
+    public float maxSpeed = 20f;
+    public float speedIncreaseRate = 0.5f;
 
+    [Header("Lane Movement")]
     public float laneDistance = 3f;
     public float laneChangeSpeed = 10f;
-    public float jumpForce = 6f;
 
-    private Animator animator;
+    [Header("Jump")]
+    public float jumpForce = 6f;
+    public float groundCheckDistance = 1.4f;
+
     private Rigidbody rb;
+    private Animator animator;
+
     private int currentLane = 0;
     private bool isGrounded;
+    private bool jumpRequested;
 
     void Start()
     {
@@ -28,18 +37,26 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             ChangeLane(1);
 
-        // Jump input
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            Jump();
-        }
+        // Jump input (buffered safely)
+        if (Input.GetKeyDown(KeyCode.Space))
+            jumpRequested = true;
     }
 
     void FixedUpdate()
     {
-        // Forward movement
-        Vector3 forwardMove = Vector3.forward * forwardSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + forwardMove);
+        CheckGrounded();
+
+        // Forward speed scaling
+        float speed = Mathf.Min(
+            baseSpeed + Time.timeSinceLevelLoad * speedIncreaseRate,
+            maxSpeed
+        );
+
+        rb.velocity = new Vector3(
+            rb.velocity.x,
+            rb.velocity.y,
+            speed
+        );
 
         // Lane movement
         Vector3 targetPosition = rb.position;
@@ -51,14 +68,20 @@ public class PlayerMovement : MonoBehaviour
             laneChangeSpeed * Time.fixedDeltaTime
         );
 
-        animator.SetBool("isGrounded", isGrounded);
-        animator.SetFloat("yVelocity", rb.linearVelocity.y);
-
-
         rb.MovePosition(newPosition);
 
-        // Ground check
-        CheckGrounded();
+        // Jump execution (physics-safe)
+        if (jumpRequested && isGrounded)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }
+
+        jumpRequested = false;
+
+        // Animator updates (AFTER physics & ground check)
+        animator.SetBool("isGrounded", isGrounded);
     }
 
     void ChangeLane(int direction)
@@ -67,24 +90,17 @@ public class PlayerMovement : MonoBehaviour
         currentLane = Mathf.Clamp(currentLane, -1, 1);
     }
 
-    void Jump()
-    {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isGrounded = false;
-    }
-
     void CheckGrounded()
     {
-        float rayLength = 1.1f;
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, rayLength);
+        Vector3 origin = transform.position + Vector3.up * 0.2f;
+        isGrounded = Physics.Raycast(origin, Vector3.down, groundCheckDistance);
     }
-    void OnCollisionEnter(Collision collision)
-{
-    if (collision.gameObject.CompareTag("Obstacle"))
-    {
-        GameManager.instance.GameOver();
-    }
-}
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            GameManager.instance.GameOver();
+        }
+    }
 }

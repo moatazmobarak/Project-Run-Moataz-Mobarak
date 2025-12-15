@@ -4,10 +4,19 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    public static PauseMenu instance;
     public GameObject pauseMenuUI;
     public Slider volumeSlider;
 
     private bool isPaused = false;
+
+    void Awake()
+{
+    if (instance == null)
+        instance = this;
+    else
+        Destroy(gameObject);
+}
 
     void Start()
     {
@@ -15,21 +24,17 @@ public class PauseMenu : MonoBehaviour
         AudioListener.volume = volumeSlider.value;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (isPaused)
-                Resume();
-            else
-                Pause();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape))
+void Update()
 {
-    Debug.Log("ESC pressed");
+    if (Input.GetKeyDown(KeyCode.Escape) && !GameManager.instance.isGameOver)
+    {
+        if (isPaused)
+            Resume();
+        else
+            Pause();
+    }
 }
 
-    }
 
     public void Resume()
     {
@@ -44,6 +49,13 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
     }
+    
+    public void ForceClose()
+{
+    pauseMenuUI.SetActive(false);
+    isPaused = false;
+}
+
 
     public void LoadMainMenu()
     {

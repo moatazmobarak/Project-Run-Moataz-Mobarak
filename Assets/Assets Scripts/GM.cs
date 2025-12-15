@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
 
         isGameOver = true;
         Time.timeScale = 0f;
-
+        PauseMenu.instance?.ForceClose();
         gameOverUI.SetActive(true);
 
         finalScoreText.text = "Score: " + ScoreManager.instance.score;
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void LoadMainMenu()
@@ -59,5 +59,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
+
     
 }

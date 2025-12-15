@@ -757,7 +757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2099829508}
-  offset: {x: 0, y: 6, z: -13}
+  offset: {x: 0, y: 4, z: -10.1}
   smoothSpeed: 5
 --- !u!1 &383518512
 GameObject:
@@ -2933,7 +2933,7 @@ MonoBehaviour:
   forwardSpeed: 14
   laneDistance: 3
   laneChangeSpeed: 10
-  jumpForce: 9
+  jumpForce: 8
 --- !u!54 &2099829504
 Rigidbody:
   m_ObjectHideFlags: 0
