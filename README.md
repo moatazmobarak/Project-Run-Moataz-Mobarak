@@ -92,11 +92,5 @@ Animator Controller
 
 Mixamo character animations
 
-
-
 More advanced difficulty scaling
 
-Author
-
-Your Name
-Course / Module Name
